@@ -100,7 +100,7 @@ function Home() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 pt-24 lg:pt-32 pb-24 relative z-10">
+      <section className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-16 relative z-10">
         {/* FLOATING DOODLES */}
         <div className="absolute top-20 left-10 w-5 h-5 bg-blue-500 rounded-full animate-pulse opacity-70"></div>
 
@@ -108,14 +108,14 @@ function Home() {
 
         <div className="absolute bottom-20 left-1/3 w-3 h-3 bg-blue-300 rounded-full animate-ping opacity-70"></div>
 
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-14 items-center">
           {/* LEFT SIDE */}
           <div>
             <div className="inline-flex items-center px-5 py-2 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm mb-8 shadow-sm">
               Real-Time Poll Analytics Platform
             </div>
 
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight text-slate-900">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight text-slate-900">
               Create Polls.
               <br />
               Collect Feedback.
@@ -148,7 +148,7 @@ function Home() {
             </div>
 
             {/* STATS */}
-            <div className="mt-16 flex flex-wrap gap-10">
+            <div className="mt-10 flex flex-wrap gap-8">
               <div>
                 <h2 className="text-4xl font-black text-blue-600">
                   10K+

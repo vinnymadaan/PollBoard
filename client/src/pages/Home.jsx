@@ -5,9 +5,11 @@ import {
   BarChart3,
   ArrowRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#f7fbff] overflow-hidden relative">
@@ -53,7 +55,10 @@ function Home() {
               Contact
             </a>
 
-            <button className="relative overflow-hidden group bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-xl shadow-blue-200 transition-all duration-300 hover:scale-105">
+            <button
+              onClick={() => navigate("/signup")}
+              className="relative overflow-hidden group bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl            font-semibold shadow-xl shadow-blue-200 transition-all duration-300 hover:scale-105"
+            >
               <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-white/30 skew-x-12"></span>
 
               <span className="relative z-10">
@@ -133,7 +138,7 @@ function Home() {
 
             {/* BUTTONS */}
             <div className="mt-12 flex flex-col sm:flex-row gap-5">
-              <button className="relative overflow-hidden group bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl shadow-blue-200 transition-all duration-300 hover:scale-105">
+              <button onClick={() => navigate("/signup")} className="relative overflow-hidden group bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl shadow-blue-200 transition-all duration-300 hover:scale-105">
                 <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-white/30 skew-x-12"></span>
 
                 <span className="relative z-10 flex items-center gap-2">

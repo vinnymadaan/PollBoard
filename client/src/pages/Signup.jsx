@@ -127,6 +127,17 @@ function Signup() {
           >
             {loading ? "Creating..." : "Create Account"}
           </button>
+
+          <p className="text-center text-slate-600 mt-6">
+            Already have an account?{" "}
+  
+          <span
+            onClick={() => navigate("/login")}
+            className="text-blue-600 font-semibold cursor-pointer hover:underline"
+          >
+            Login
+          </span>
+          </p>
         </form>
       </div>
     </div>

@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
-import { loginUser } from "../services/authService";
+import { loginUser } from "../services/auth.service.js";
 
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/Auth.context.jsx";
 
 function Login() {
   const navigate = useNavigate();
@@ -111,6 +111,17 @@ function Login() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
+
+          <p className="text-center text-slate-600 mt-6">
+            Don’t have an account?{" "}
+  
+            <span
+              onClick={() => navigate("/signup")}
+              className="text-blue-600 font-semibold cursor-pointer hover:underline"
+            >
+              Sign up
+            </span>
+          </p>
         </form>
       </div>
     </div>

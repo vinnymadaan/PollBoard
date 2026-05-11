@@ -198,3 +198,52 @@ export const checkPhone = async (req, res) => {
     });
   }
 };
+
+export const resetPasswordWithPhone = async (req, res) => {
+
+  try {
+
+    const {
+      phone,
+      newPassword,
+    } = req.body;
+
+    const cleanPhone =
+      String(phone).replace(/^0+/, "");
+
+    const user =
+      await User.findOne({
+        phone: cleanPhone,
+      });
+
+    if (!user) {
+      return res.status(404).json({
+        message:
+          "User not found",
+      });
+    }
+
+    const hashedPassword =
+      await bcrypt.hash(
+        newPassword,
+        10
+      );
+
+    user.password =
+      hashedPassword;
+
+    await user.save();
+
+    res.status(200).json({
+      message:
+        "Password reset successful",
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        "Server error",
+    });
+  }
+};

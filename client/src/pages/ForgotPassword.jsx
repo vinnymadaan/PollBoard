@@ -47,10 +47,43 @@ function ForgotPassword() {
   };
 
   // reset password
-  const handleResetPassword = () => {
-    // later backend integration
+  const handleResetPassword = async () => {
+
+  try {
+
+    if (
+      newPassword !==
+      confirmPassword
+    ) {
+
+      toast.error(
+        "Passwords do not match"
+      );
+
+      return;
+    }
+
+    await axios.post(
+      "http://localhost:8000/api/auth/reset-password-phone",
+      {
+        phone,
+        newPassword,
+      }
+    );
+
+    toast.success(
+      "Password updated"
+    );
+
     setStep("done");
-  };
+
+  } catch (error) {
+
+    toast.error(
+      "Failed to reset password"
+    );
+  }
+};
 
   const sendResetEmail = async () => {
   try {

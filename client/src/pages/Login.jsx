@@ -1,12 +1,12 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
 import { loginUser } from "../services/auth.service.js";
-
 import { useAuth } from "../context/Auth.context.jsx";
+
+import AuthLayout from "../layouts/Auth.layout.jsx";
 
 function Login() {
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  // handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -28,7 +27,6 @@ function Login() {
     });
   };
 
-  // handle login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +35,6 @@ function Login() {
 
       const data = await loginUser(formData);
 
-      // save user in context
       login(data.user);
 
       toast.success("Login successful");
@@ -54,15 +51,14 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7fbff] px-6">
-      <div className="w-full max-w-md bg-white rounded-[32px] shadow-2xl p-10">
-        
-        <h1 className="text-4xl font-black text-center">
+    <AuthLayout>
+      <div>
+        <h1 className="text-4xl font-black text-center text-slate-900">
           Welcome Back
         </h1>
 
-        <p className="text-slate-500 text-center mt-3">
-          Login to continue to PollFlow.
+        <p className="text-slate-600 text-center mt-3 leading-relaxed">
+          Login to continue building and analyzing your polls.
         </p>
 
         <form
@@ -71,8 +67,8 @@ function Login() {
         >
           {/* EMAIL */}
           <div>
-            <label className="block mb-2 font-medium">
-              Email
+            <label className="block mb-2 font-semibold text-slate-700">
+              Email Address
             </label>
 
             <input
@@ -82,24 +78,24 @@ function Login() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full border border-slate-300 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
+              className="w-full bg-white/60 border border-white/70 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300"
             />
           </div>
 
           {/* PASSWORD */}
           <div>
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-semibold text-slate-700">
               Password
             </label>
 
             <input
               type="password"
               name="password"
-              placeholder="Enter password"
+              placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full border border-slate-300 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
+              className="w-full bg-white/60 border border-white/70 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300"
             />
           </div>
 
@@ -107,24 +103,31 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold transition-all duration-300"
+            className="relative overflow-hidden group w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold shadow-xl shadow-blue-200 transition-all duration-300 hover:scale-[1.02]"
           >
-            {loading ? "Logging in..." : "Login"}
-          </button>
+            <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-white/30 skew-x-12"></span>
 
-          <p className="text-center text-slate-600 mt-6">
-            Don’t have an account?{" "}
-  
-            <span
-              onClick={() => navigate("/signup")}
-              className="text-blue-600 font-semibold cursor-pointer hover:underline"
-            >
-              Sign up
+            <span className="relative z-10">
+              {loading
+                ? "Logging In..."
+                : "Login"}
             </span>
-          </p>
+          </button>
         </form>
+
+        {/* SIGNUP LINK */}
+        <p className="text-center text-slate-600 mt-8">
+          Don’t have an account?{" "}
+
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-blue-600 font-semibold cursor-pointer hover:underline"
+          >
+            Sign up
+          </span>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 

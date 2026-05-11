@@ -1,12 +1,10 @@
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 import { useState } from "react";
-
-import {
-  ArrowRight,
-  Mail,
-  Smartphone,
-} from "lucide-react";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../firebase/firebase";
+import { ArrowRight, Mail, Smartphone } from "lucide-react";
+import axios from "axios";
 
 import AuthLayout from "../layouts/Auth.layout.jsx";
 
@@ -32,12 +30,13 @@ function ForgotPassword() {
 
   // send action
   const handleSend = async () => {
+
   if (method === "email") {
     await sendResetEmail();
   }
 
   if (method === "phone") {
-    setStep("otp");
+    await sendOTP();
   }
 };
 
@@ -108,6 +107,79 @@ function ForgotPassword() {
     console.log(error);
     toast.error(
       "Failed to send reset email"
+    );
+  }
+};
+
+  const setupRecaptcha = () => {
+
+  if (!window.recaptchaVerifier) {
+
+    window.recaptchaVerifier =
+      new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+
+          callback: () => {
+            console.log(
+              "Recaptcha verified"
+            );
+          },
+        }
+      );
+  }
+};
+
+  const sendOTP = async () => {
+
+  try {
+
+    const response = await axios.post(
+      "http://localhost:8000/api/auth/check-phone",
+      { phone }
+    );
+
+    if (!response.data.exists) {
+
+      toast.error(
+        "Phone number not found"
+      );
+
+      return;
+    }
+
+    setupRecaptcha();
+
+    const appVerifier =
+      window.recaptchaVerifier;
+
+    const cleanPhone = String(phone).replace(/^0+/, "");
+
+    const formattedPhone =
+      `+91${cleanPhone}`;
+
+    const confirmationResult =
+      await signInWithPhoneNumber(
+        auth,
+        formattedPhone,
+        appVerifier
+      );
+
+    window.confirmationResult =
+      confirmationResult;
+
+    toast.success("OTP Sent");
+
+    setStep("otp");
+
+  } catch (error) {
+
+    console.log(error);
+
+    toast.error(
+      "Failed to send OTP"
     );
   }
 };
@@ -327,6 +399,7 @@ function ForgotPassword() {
             </p>
           </div>
         )}
+        <div id="recaptcha-container"></div>
       </div>
     </AuthLayout>
   );

@@ -16,6 +16,7 @@ function Signup() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
   });
 
@@ -95,6 +96,21 @@ function Signup() {
               name="email"
               placeholder="Enter your email"
               value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full bg-white/60 border border-white/70 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300"
+            />
+          </div>
+
+          {/* PHONE */}
+          <div>
+            <label className="block mb-2 font-semibold text-slate-700">Phone Number</label>
+
+            <input
+              type="text"
+              name="phone"
+              placeholder="Enter phone number"
+              value={formData.phone}
               onChange={handleChange}
               required
               className="w-full bg-white/60 border border-white/70 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300"

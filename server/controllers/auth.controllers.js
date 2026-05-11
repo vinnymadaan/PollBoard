@@ -6,7 +6,9 @@ import User from "../models/User.models.js";
 
 export const signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
+
+    const cleanPhone = String(phone).replace(/^0+/, "");
 
     // check existing user
     const existingUser = await User.findOne({ email });
@@ -20,10 +22,19 @@ export const signup = async (req, res) => {
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const existingPhone = await User.findOne({ phone });
+
+    if (existingPhone) {
+      return res.status(400).json({
+        message: "Phone number already exists",
+      });
+    }
+
     // create user
     const user = await User.create({
       name,
       email,
+      phone: cleanPhone,
       password: hashedPassword,
     });
 
@@ -53,6 +64,7 @@ export const signup = async (req, res) => {
     });
   }
 };
+
 
 
 export const login = async (req, res) => {
@@ -108,10 +120,7 @@ export const login = async (req, res) => {
 };
 
 
-export const forgotPassword = async (
-  req,
-  res
-) => {
+export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -152,6 +161,40 @@ export const forgotPassword = async (
   } catch (error) {
     res.status(500).json({
       message: "Server Error",
+    });
+  }
+};
+
+export const checkPhone = async (req, res) => {
+  console.log(req.body);
+  try {
+
+    const { phone } = req.body;
+    const cleanPhone =
+  String(phone).replace(/^0+/, ""); 
+
+    const user =
+      await User.findOne({
+        phone,
+      });
+
+    if (!user) {
+      return res.status(404).json({
+        exists: false,
+        message:
+          "No account linked with this phone number",
+      });
+    }
+
+    res.status(200).json({
+      exists: true,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        "Server error",
     });
   }
 };

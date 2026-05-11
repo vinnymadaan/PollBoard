@@ -1,6 +1,6 @@
 import express from "express";
 
-import { signup, login } from "../controllers/auth.controllers.js";
+import { signup, login, forgotPassword } from "../controllers/auth.controllers.js";
 import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -10,5 +10,9 @@ router.post("/login", login);
 router.get("/me", protect, (req, res) => {
   res.json(req.user);
 });
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
 
 export default router;

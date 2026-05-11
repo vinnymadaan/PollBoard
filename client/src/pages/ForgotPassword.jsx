@@ -1,3 +1,5 @@
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 import { useState } from "react";
 
 import {
@@ -29,17 +31,15 @@ function ForgotPassword() {
     useState("");
 
   // send action
-  const handleSend = () => {
-    if (method === "email") {
-      // later EmailJS logic
-      setStep("success");
-    }
+  const handleSend = async () => {
+  if (method === "email") {
+    await sendResetEmail();
+  }
 
-    if (method === "phone") {
-      // later Firebase logic
-      setStep("otp");
-    }
-  };
+  if (method === "phone") {
+    setStep("otp");
+  }
+};
 
   // verify otp
   const handleVerifyOtp = () => {
@@ -52,6 +52,65 @@ function ForgotPassword() {
     // later backend integration
     setStep("done");
   };
+
+  const sendResetEmail = async () => {
+  try {
+    // backend request
+    const response = await fetch(
+      "http://localhost:8000/api/auth/forgot-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message);
+
+      return;
+    }
+
+    // SEND EMAIL USING EMAILJS
+    await emailjs.send(
+      import.meta.env
+        .VITE_EMAILJS_SERVICE_ID,
+
+      import.meta.env
+        .VITE_EMAILJS_TEMPLATE_ID,
+
+      {
+        user_name: data.userName,
+
+        reset_link: data.resetLink,
+
+        to_email: email,
+      },
+
+      import.meta.env
+        .VITE_EMAILJS_PUBLIC_KEY
+    );
+
+    toast.success(
+      "Reset email sent successfully"
+    );
+
+    setStep("success");
+
+  } catch (error) {
+    console.log(error);
+    toast.error(
+      "Failed to send reset email"
+    );
+  }
+};
 
   return (
     <AuthLayout>

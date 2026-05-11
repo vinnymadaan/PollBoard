@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import User from "../models/User.models.js";
 
@@ -102,6 +103,55 @@ export const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: error.message,
+    });
+  }
+};
+
+
+export const forgotPassword = async (
+  req,
+  res
+) => {
+  try {
+    const { email } = req.body;
+
+    // CHECK USER
+    const user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // GENERATE TOKEN
+    const resetToken =
+      crypto.randomBytes(32).toString("hex");
+
+    // SAVE TOKEN
+    user.resetPasswordToken = resetToken;
+
+    // EXPIRES IN 15 MIN
+    user.resetPasswordExpires =
+      Date.now() + 15 * 60 * 1000;
+
+    await user.save();
+
+    // RESET LINK
+    const resetLink =
+      `http://localhost:5173/reset-password/${resetToken}`;
+
+    res.status(200).json({
+      message: "Reset link generated",
+      resetLink,
+      userName: user.name,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error",
     });
   }
 };

@@ -99,6 +99,15 @@ function Login() {
             />
           </div>
 
+          <div className="flex justify-end">
+            <span
+              onClick={() => navigate("/forgot-password")}
+              className="text-sm text-blue-600 font-medium cursor-pointer hover:underline"
+            >
+              Forgot Password?
+            </span>
+          </div>           
+
           {/* BUTTON */}
           <button
             type="submit"

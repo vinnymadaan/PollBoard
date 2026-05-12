@@ -140,3 +140,25 @@ export const getDashboardData = async (token) => {
 
   return response.data;
 };
+
+export const deletePoll = async (pollId, token) => {
+
+  const response =
+    await axios.delete(
+
+      `${API}/${pollId}`,
+
+      {
+        headers: {
+
+          Authorization:
+            `Bearer ${token}`,
+
+        },
+      }
+
+    );
+
+  return response.data;
+
+};

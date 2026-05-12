@@ -7,6 +7,7 @@ import { submitVote }from "../controllers/poll.controllers.js";
 import { getPollAnalytics } from "../controllers/poll.controllers.js";
 import { publishResults } from "../controllers/poll.controllers.js";
 import { getDashboardData } from "../controllers/poll.controllers.js";
+import { deletePoll } from "../controllers/poll.controllers.js";
 
 
 router.post(
@@ -25,6 +26,12 @@ router.get(
   "/my-polls",
   protect,
   getMyPolls
+);
+
+router.delete(
+  "/:id",
+  protect,
+  deletePoll
 );
 
 
@@ -49,6 +56,7 @@ router.patch(
   protect,
   publishResults
 );
+
 
 
 export default router

@@ -117,6 +117,15 @@ export default function Analytics() {
     );
   }
 
+  const COLORS = [
+  "#3B82F6",
+  "#06B6D4",
+  "#8B5CF6",
+  "#14B8A6",
+  "#6366F1",
+  "#0EA5E9",
+];
+
 
 
   return (
@@ -256,7 +265,7 @@ export default function Analytics() {
 
                     <ResponsiveContainer
                       width="100%"
-                      height="100%"
+                      height={350}
                     >
 
                       <BarChart
@@ -272,12 +281,39 @@ export default function Analytics() {
                           stroke="#94a3b8"
                         />
 
-                        <Tooltip />
+                        <Tooltip
+  contentStyle={{
+    backgroundColor: "#0F172A",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "white",
+  }}
+/>
 
                         <Bar
-                          dataKey="votes"
-                          radius={[10, 10, 0, 0]}
-                        />
+  dataKey="votes"
+  radius={[12, 12, 0, 0]}
+>
+
+  {
+    chartData.map((entry, index) => (
+
+      <Cell
+        key={index}
+        fill={[
+          "#60A5FA",
+          "#22D3EE",
+          "#818CF8",
+          "#38BDF8",
+          "#A78BFA",
+          "#2DD4BF",
+        ][index % 6]}
+      />
+
+    ))
+  }
+
+</Bar>
 
                       </BarChart>
 
@@ -298,7 +334,7 @@ export default function Analytics() {
 
                       <ResponsiveContainer
                         width="100%"
-                        height="100%"
+                        height={350}
                       >
 
                         <PieChart>
@@ -307,22 +343,36 @@ export default function Analytics() {
                             data={chartData}
                             dataKey="votes"
                             nameKey="name"
+                            cx="50%"
+                            cy="50%"
                             outerRadius={120}
-                            fill="#3b82f6"
-                            label
+                            innerRadius={60}
+                            paddingAngle={5}
                           >
 
                             {chartData.map((entry, idx) => (
 
                               <Cell
                                 key={idx}
+                                fill={
+                                COLORS[
+                                index % COLORS.length
+                                ]
+                                }
                               />
 
                             ))}
 
                           </Pie>
 
-                          <Tooltip />
+                          <Tooltip
+  contentStyle={{
+    backgroundColor: "#0F172A",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "white",
+  }}
+/>
 
                         </PieChart>
 

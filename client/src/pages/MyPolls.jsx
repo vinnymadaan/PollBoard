@@ -7,10 +7,21 @@ import {
   getMyPolls,
 } from "../services/poll.service";
 
+import { useNavigate }
+from "react-router-dom";
+
+import {
+  deletePoll as deletePollService
+}
+from "../services/poll.service";
+import toast
+from "react-hot-toast";
 
 
 export default function MyPolls() {
 
+    const navigate =
+    useNavigate();
   const [polls, setPolls] =
     useState([]);
 
@@ -99,9 +110,9 @@ const handleCopyLink = (pollId) => {
     textArea
   );
 
-  alert(
-    "Poll link copied!"
-  );
+  toast.success(
+  "Poll link copied!"
+);
 };
 
 
@@ -137,7 +148,7 @@ const handlePublish = async (pollId) => {
 
 
 
-    alert(
+    toast.success(
       "Results published!"
     );
 
@@ -145,7 +156,7 @@ const handlePublish = async (pollId) => {
 
     console.log(error);
 
-    alert(
+    toast.error(
       "Failed to publish results"
     );
 
@@ -153,6 +164,71 @@ const handlePublish = async (pollId) => {
 
 };
 
+const deletePoll =
+async (pollId) => {
+
+  console.log("DELETE START");
+
+  const confirmDelete =
+    window.confirm(
+      "Delete this poll permanently?"
+    );
+
+  if (!confirmDelete)
+    return;
+
+  try {
+
+    console.log("TRY START");
+
+    const token =
+      localStorage.getItem(
+        "token"
+      );
+
+    console.log("TOKEN", token);
+
+    const response =
+      await deletePollService(
+        pollId,
+        token
+      );
+
+    console.log(
+      "DELETE RESPONSE",
+      response
+    );
+
+    toast.success(
+      "Poll deleted"
+    );
+
+    setPolls((prevPolls) =>
+
+      prevPolls.filter(
+
+        (poll) =>
+
+          poll._id !== pollId
+
+      )
+
+    );
+
+  } catch (error) {
+
+    console.log(
+      "DELETE ERROR",
+      error
+    );
+
+    toast.error(
+      "Failed to delete poll"
+    );
+
+  }
+
+};
 
 
   return (
@@ -186,6 +262,9 @@ const handlePublish = async (pollId) => {
 
 
           <button
+          onClick={() =>
+  navigate("/create-poll")
+}
             className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-7 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105"
           >
             + Create New Poll
@@ -310,6 +389,11 @@ const handlePublish = async (pollId) => {
                 <div className="flex items-center gap-3">
 
                   <button
+                  onClick={() =>
+  navigate(
+    `/analytics/${poll._id}`
+  )
+}
                     className="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 text-sm font-medium"
                   >
                     Analytics
@@ -348,6 +432,19 @@ const handlePublish = async (pollId) => {
                   >
                     Share
                   </button>
+
+                  <button
+
+  onClick={() =>
+    deletePoll(
+      poll._id
+    )
+  }
+
+  className="px-5 py-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 border border-red-500/20 text-red-300 transition-all duration-300 text-sm font-semibold"
+>
+  Delete
+</button>
 
                 </div>
 

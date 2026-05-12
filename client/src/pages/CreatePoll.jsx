@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { createPoll } from "../services/poll.service";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function CreatePoll() {
 
@@ -27,6 +29,8 @@ export default function CreatePoll() {
         ],
       },
     ]);
+
+    const navigate = useNavigate();
 
 
 
@@ -140,15 +144,16 @@ export default function CreatePoll() {
 
     console.log(response);
 
-    alert(
+      toast.success(
       "Poll created successfully"
     );
+    navigate("/my-polls");
 
   } catch (error) {
 
     console.log(error);
 
-    alert(
+    toast.error(
       "Failed to create poll"
     );
   }

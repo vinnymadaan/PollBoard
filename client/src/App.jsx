@@ -11,6 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import MyPolls from "./pages/MyPolls";
 import PublicPoll from "./pages/PublicPoll";
 import Analytics from "./pages/Analytics";
+import Results from "./pages/Results";
 
 function App() {
   return (
@@ -58,6 +59,11 @@ function App() {
       <Route
         path="/analytics/:id"
         element={<Analytics />}
+      />
+
+      <Route
+        path="/results/:id"
+        element={<Results />}
       />
       
     </Routes>

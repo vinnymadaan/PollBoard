@@ -8,8 +8,17 @@ import { getPollById } from "../services/poll.service";
 
 import { submitVote } from "../services/poll.service";
 
+import {
+  useNavigate
+} from "react-router-dom";
+
+import toast
+from "react-hot-toast";
+
 
 export default function PublicPoll() {
+
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -18,6 +27,10 @@ export default function PublicPoll() {
   const [loading, setLoading] = useState(true);
 
   const [answers, setAnswers] = useState({});
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const [alreadyVoted, setAlreadyVoted] = useState(false);
 
     const isExpired = 
     poll &&
@@ -31,8 +44,7 @@ export default function PublicPoll() {
 
   useEffect(() => {
 
-    const fetchPoll =
-      async () => {
+    const fetchPoll = async () => {
 
       try {
 
@@ -54,6 +66,26 @@ export default function PublicPoll() {
     };
 
     fetchPoll();
+
+    const votedPolls = JSON.parse(
+
+    localStorage.getItem(
+      "votedPolls"
+    )
+
+  ) || [];
+
+
+
+if (
+
+  votedPolls.includes(id)
+
+) {
+
+  setAlreadyVoted(true);
+
+}
 
   }, [id]);
 
@@ -114,19 +146,61 @@ export default function PublicPoll() {
 
     console.log(response);
 
-    alert(
-      "Vote submitted successfully"
-    );
+    toast.success(
+  "Vote submitted successfully"
+);
+
+    const votedPolls =
+
+  JSON.parse(
+
+    localStorage.getItem(
+      "votedPolls"
+    )
+
+  ) || [];
+
+
+
+// ADD CURRENT POLL ID
+
+votedPolls.push(
+  poll._id
+);
+
+
+
+// SAVE BACK TO LOCALSTORAGE
+
+localStorage.setItem(
+
+  "votedPolls",
+
+  JSON.stringify(
+    votedPolls
+  )
+
+);
+
+
+
+// UPDATE STATES
+
+setAlreadyVoted(true);
+
+setSubmitted(true);
 
   } catch (error) {
 
     console.log(error);
 
-    alert(
-      "Failed to submit vote"
-    );
+    toast.error(
+  "Failed to submit vote"
+);
   }
 };
+
+
 
 
 
@@ -161,6 +235,113 @@ export default function PublicPoll() {
 
     );
   }
+
+  const handleCheckResults =
+() => {
+
+  const token =
+    localStorage.getItem(
+      "token"
+    );
+
+
+
+  if (!token) {
+
+    navigate("/signup");
+
+  } else {
+
+    navigate(
+      `/results/${poll._id}`
+    );
+
+  }
+
+};
+
+  if (submitted) {
+
+  return (
+
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
+
+  <div className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-10 text-center backdrop-blur-xl">
+
+    <h1 className="text-4xl font-bold text-white">
+
+      Vote Submitted Successfully ✅
+
+    </h1>
+
+    <p className="text-slate-400 mt-4 text-lg">
+
+      Thanks for participating in this poll.
+
+    </p>
+
+
+
+    <button
+
+      onClick={
+        handleCheckResults
+      }
+
+      className="mt-8 px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all duration-300 text-white font-semibold"
+    >
+      Check Results
+    </button>
+
+  </div>
+
+</div>
+
+  )
+}
+
+if (alreadyVoted) {
+
+  return (
+
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
+
+      <div className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-10 text-center backdrop-blur-xl">
+
+        <h1 className="text-4xl font-bold text-white">
+
+          You Already Voted ✅
+
+        </h1>
+
+        <p className="text-slate-400 mt-4 text-lg">
+
+          You have already participated in this poll.
+
+        </p>
+
+
+
+        <button
+
+          onClick={
+            handleCheckResults
+          }
+
+          className="mt-8 px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all duration-300 text-white font-semibold"
+        >
+          Check Results
+        </button>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+
 
 
 
@@ -349,7 +530,7 @@ export default function PublicPoll() {
             onClick={handleSubmit}
 
             className={`w-full mt-14 py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${
-            sExpired
+              isExpired
             ? "bg-slate-700 cursor-not-allowed"
             : "bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-[1.01] shadow-2xl shadow-cyan-500/20"
             }`}

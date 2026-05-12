@@ -410,3 +410,74 @@ export const getDashboardData = async (req, res) => {
   }
 
 };
+
+export const deletePoll = async (req, res) => {
+
+  try {
+
+    const poll =
+      await Poll.findById(
+        req.params.id
+      );
+
+
+
+    if (!poll) {
+
+      return res.status(404).json({
+
+        message:
+          "Poll not found",
+
+      });
+
+    }
+
+
+
+    // only creator can delete
+
+    if (
+
+      poll.createdBy.toString()
+
+      !==
+
+      req.user.id
+
+    ) {
+
+      return res.status(403).json({
+
+        message:
+          "Unauthorized",
+
+      });
+
+    }
+
+
+
+    await poll.deleteOne();
+
+
+
+    res.status(200).json({
+
+      message:
+        "Poll deleted successfully",
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      message:
+        error.message,
+
+    });
+
+  }
+
+};

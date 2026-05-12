@@ -35,21 +35,22 @@ function Home() {
           {/* DESKTOP NAV */}
           <div className="hidden md:flex items-center gap-10">
             <a
-              href="#"
+              href="#features"
+              
               className="text-slate-700 font-medium hover:text-blue-600 transition-all duration-300"
             >
               Features
             </a>
 
             <a
-              href="#"
+              href="#about"
               className="text-slate-700 font-medium hover:text-blue-600 transition-all duration-300"
             >
               About
             </a>
 
             <a
-              href="#"
+              href="#contact"
               className="text-slate-700 font-medium hover:text-blue-600 transition-all duration-300"
             >
               Contact
@@ -84,15 +85,15 @@ function Home() {
         {isOpen && (
           <div className="md:hidden px-6 pb-6 pt-2 bg-white/90 backdrop-blur-xl border-t border-slate-100">
             <div className="flex flex-col gap-5">
-              <a href="#" className="text-slate-700 font-medium">
+              <a href="#features" className="text-slate-700 font-medium">
                 Features
               </a>
 
-              <a href="#" className="text-slate-700 font-medium">
+              <a href="#about" className="text-slate-700 font-medium">
                 About
               </a>
 
-              <a href="#" className="text-slate-700 font-medium">
+              <a href="#contact" className="text-slate-700 font-medium">
                 Contact
               </a>
 
@@ -147,9 +148,16 @@ function Home() {
                 </span>
               </button>
 
-              <button className="px-8 py-4 rounded-2xl border border-slate-300 hover:border-blue-400 hover:text-blue-600 transition-all duration-300 font-semibold bg-white hover:shadow-lg">
-                View Demo
-              </button>
+              <button
+
+  onClick={() =>
+    navigate("/signup")
+  }
+
+  className="px-8 py-4 rounded-2xl border border-slate-300 hover:border-blue-400 hover:text-blue-600 transition-all duration-300 font-semibold bg-white hover:shadow-lg"
+>
+  View Demo
+</button>
             </div>
 
             {/* STATS */}
@@ -259,7 +267,9 @@ function Home() {
       </section>
 
       {/* FEATURES SECTION */}
-<section className="max-w-7xl mx-auto px-6 lg:px-10 py-24 relative z-10">
+<section 
+id="features"
+className="max-w-7xl mx-auto px-6 lg:px-10 py-24 relative z-10">
   <div className="text-center">
     <h2 className="text-5xl md:text-6xl font-black tracking-tight text-slate-900">
       Everything You Need
@@ -321,7 +331,9 @@ function Home() {
 </section>
 
 {/* HOW IT WORKS */}
-<section className="max-w-7xl mx-auto px-6 lg:px-10 py-24 relative z-10">
+<section 
+ id="about"
+className="max-w-7xl mx-auto px-6 lg:px-10 py-24 relative z-10">
   <div className="text-center">
     <h2 className="text-5xl md:text-6xl font-black tracking-tight">
       How It Works
@@ -396,15 +408,24 @@ function Home() {
         analyze responses with a modern real-time analytics platform.
       </p>
 
-      <button className="mt-10 bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:scale-105 transition-all duration-300">
-        Get Started Now
-      </button>
+      <button
+
+  onClick={() =>
+    navigate("/signup")
+  }
+
+  className="mt-10 bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:scale-105 transition-all duration-300"
+>
+  Get Started Now
+</button>
     </div>
   </div>
 </section>
 
 {/* FOOTER */}
-<footer className="border-t border-slate-200 bg-white/50 backdrop-blur-xl">
+<footer 
+id="contact"
+className="border-t border-slate-200 bg-white/50 backdrop-blur-xl">
   <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
     <div className="grid md:grid-cols-4 gap-12">
       
@@ -433,17 +454,17 @@ function Home() {
         </h3>
 
         <div className="mt-6 flex flex-col gap-4 text-slate-600">
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Features
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Analytics
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Dashboard
-          </a>
+          </p>
         </div>
       </div>
 
@@ -453,17 +474,17 @@ function Home() {
         </h3>
 
         <div className="mt-6 flex flex-col gap-4 text-slate-600">
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             About
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Contact
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Careers
-          </a>
+          </p>
         </div>
       </div>
 
@@ -473,17 +494,17 @@ function Home() {
         </h3>
 
         <div className="mt-6 flex flex-col gap-4 text-slate-600">
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Privacy Policy
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Terms of Service
-          </a>
+          </p>
 
-          <a href="#" className="hover:text-blue-600 transition-all">
+          <p className="hover:text-blue-600 transition-all cursor-default">
             Security
-          </a>
+          </p>
         </div>
       </div>
     </div>
@@ -495,17 +516,17 @@ function Home() {
       </p>
 
       <div className="flex items-center gap-6 text-slate-500">
-        <a href="#" className="hover:text-blue-600 transition-all">
+        <p className="hover:text-blue-600 transition-all cursor-default">
           Twitter
-        </a>
+        </p>
 
-        <a href="#" className="hover:text-blue-600 transition-all">
+       <p className="hover:text-blue-600 transition-all cursor-default">
           GitHub
-        </a>
+        </p>
 
-        <a href="#" className="hover:text-blue-600 transition-all">
+        <p className="hover:text-blue-600 transition-all cursor-default">
           LinkedIn
-        </a>
+        </p>
       </div>
     </div>
   </div>

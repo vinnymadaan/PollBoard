@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getDashboardData } from "../services/poll.service";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 export default function Dashboard() {
@@ -107,7 +108,7 @@ const handleCopyLink =
     textArea
   );
 
-  alert(
+  toast.success(
     "Poll link copied!"
   );
 

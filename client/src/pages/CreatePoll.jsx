@@ -142,7 +142,7 @@ export default function CreatePoll() {
         token
       );
 
-    console.log(response);
+
 
       toast.success(
       "Poll created successfully"
@@ -151,7 +151,7 @@ export default function CreatePoll() {
 
   } catch (error) {
 
-    console.log(error);
+
 
     toast.error(
       "Failed to create poll"

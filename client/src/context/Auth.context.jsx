@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
   // login function
   const login = (userData) => {
-    console.log("LOGIN FUNCTION CALLED");
+
     localStorage.setItem(
       "user",
       JSON.stringify(userData)

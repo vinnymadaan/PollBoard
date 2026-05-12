@@ -59,7 +59,7 @@ export default function Analytics() {
 
       } catch (error) {
 
-        console.log(error);
+
 
       } finally {
 

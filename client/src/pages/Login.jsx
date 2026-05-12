@@ -35,6 +35,11 @@ function Login() {
 
       const data = await loginUser(formData);
 
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
       login(data.user);
 
       toast.success("Login successful");

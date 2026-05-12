@@ -5,6 +5,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { ArrowRight, Mail, Smartphone } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import AuthLayout from "../layouts/Auth.layout.jsx";
 
@@ -27,6 +28,8 @@ function ForgotPassword() {
 
   const [confirmPassword, setConfirmPassword] =
     useState("");
+
+  const navigate = useNavigate();
 
   // send action
   const handleSend = async () => {
@@ -76,6 +79,10 @@ function ForgotPassword() {
     );
 
     setStep("done");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
 
   } catch (error) {
 

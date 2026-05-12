@@ -4,12 +4,39 @@ import cors from "cors";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+import pollRoutes from "./routes/poll.routes.js";
+
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
+const server = createServer(app);
+
+export const io = new Server(server, {
+    cors: {
+      origin: "*",
+       methods: [ "GET", "POST" ],
+      },
+  });
+
+  io.on( "connection", (socket) => {
+    console.log( "User connected:",socket.id );
+    
+    socket.on(
+      "disconnect",
+      () => {
+        console.log( "User disconnected:", socket.id );
+      }
+    );
+
+  }
+);
+
 
 app.use(cors({
   origin: [
@@ -28,8 +55,11 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 
+app.use("/api/polls", pollRoutes);
+
 const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+server.listen( PORT, () => {
+  console.log( `Server running on port ${PORT}`);
+  }
+);

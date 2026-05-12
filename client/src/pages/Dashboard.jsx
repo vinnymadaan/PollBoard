@@ -1,47 +1,117 @@
+import { useEffect, useState } from "react"
+import { getDashboardData } from "../services/poll.service";
+import { useNavigate } from "react-router-dom";
+
+
 export default function Dashboard() {
+
+  const [dashboardData, setDashboardData] = useState(null);
+  const navigate = useNavigate();
+
   const stats = [
     {
       title: "Total Polls",
-      value: "12",
+      value: dashboardData?.totalPolls,
       description: "Polls created so far",
     },
     {
       title: "Responses",
-      value: "1.2K",
+      value: dashboardData?.totalResponses,
       description: "Total community votes",
     },
     {
       title: "Active Polls",
-      value: "5",
+      value: dashboardData?.activePolls,
       description: "Currently collecting responses",
     },
     {
       title: "Published Results",
-      value: "8",
+      value: dashboardData?.publishedResults,
       description: "Results visible publicly",
     },
   ];
 
-  const polls = [
-    {
-      title: "Frontend Framework Survey",
-      responses: 245,
-      status: "Active",
-      expires: "2 days left",
-    },
-    {
-      title: "AI Tools For Developers",
-      responses: 182,
-      status: "Published",
-      expires: "Ended",
-    },
-    {
-      title: "Best Remote Work Setup",
-      responses: 91,
-      status: "Active",
-      expires: "5 hours left",
-    },
-  ];
+
+
+  useEffect(() => {
+
+  const fetchDashboard = async () => {
+
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      const data =
+        await getDashboardData(
+          token
+        );
+
+      setDashboardData(
+        data
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  fetchDashboard();
+
+}, []);
+
+if (!dashboardData) {
+
+  return (
+
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+
+      Loading dashboard...
+
+    </div>
+
+  );
+
+}
+
+const handleCopyLink =
+(pollId) => {
+
+  const pollLink =
+    `http://localhost:5173/poll/${pollId}`;
+
+  const textArea =
+    document.createElement(
+      "textarea"
+    );
+
+  textArea.value =
+    pollLink;
+
+  document.body.appendChild(
+    textArea
+  );
+
+  textArea.select();
+
+  document.execCommand(
+    "copy"
+  );
+
+  document.body.removeChild(
+    textArea
+  );
+
+  alert(
+    "Poll link copied!"
+  );
+
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
@@ -62,7 +132,9 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <button className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105">
+          <button
+          onClick={ () => navigate("/create-poll") }
+           className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105">
             + Create Poll
           </button>
         </div>
@@ -97,18 +169,18 @@ export default function Dashboard() {
                 Recent Polls
               </h2>
 
-              <p className="text-slate-400 mt-2">
-                Track engagement and monitor active polls.
-              </p>
+              
             </div>
 
-            <button className="text-blue-400 hover:text-blue-300 transition-all duration-300 font-medium">
+            <button 
+            onClick={ () => navigate("/my-polls") }
+            className="text-blue-400 hover:text-blue-300 transition-all duration-300 font-medium">
               View All
             </button>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {polls.map((poll, index) => (
+            {dashboardData.recentPolls.map((poll, index) => (
               <div
                 key={index}
                 className="group backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-7 hover:bg-white/10 transition-all duration-300"
@@ -120,7 +192,31 @@ export default function Dashboard() {
                     </h3>
 
                     <p className="text-slate-400 mt-3">
-                      {poll.responses} responses collected
+                      {
+
+                      poll.questions.reduce(
+
+                      (total, question) =>
+
+                        total +
+
+                        question.options.reduce(
+
+                          (sum, option) =>
+
+                            sum + option.votes,
+
+                              0
+
+                            ),
+
+                          0
+
+                        )
+
+                      }
+
+                      {" "}responses collected
                     </p>
                   </div>
 
@@ -131,7 +227,9 @@ export default function Dashboard() {
                         : "bg-blue-500/15 text-blue-300 border border-blue-500/20"
                     }`}
                   >
-                    {poll.status}
+                    {poll.isPublished
+                    ? "Published"
+                    : "Active"}
                   </span>
                 </div>
 
@@ -147,11 +245,16 @@ export default function Dashboard() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <button className="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 text-sm font-medium">
+                    <button 
+                    onClick={() => navigate(`/analytics/${poll._id}`)}
+                    className="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 text-sm font-medium"
+                    >
                       Analytics
                     </button>
 
-                    <button className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all duration-300 text-sm font-semibold">
+                    <button
+                    onClick={() => handleCopyLink( poll._id) }
+                     className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all duration-300 text-sm font-semibold">
                       Share
                     </button>
                   </div>
@@ -174,7 +277,9 @@ export default function Dashboard() {
               </p>
             </div>
 
-            <button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-105 transition-all duration-300 px-8 py-4 rounded-2xl font-bold shadow-2xl shadow-cyan-500/20 whitespace-nowrap">
+            <button
+             onClick={() => navigate("/create-poll") }
+             className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-105 transition-all duration-300 px-8 py-4 rounded-2xl font-bold shadow-2xl shadow-cyan-500/20 whitespace-nowrap">
               Create Interactive Poll
             </button>
           </div>

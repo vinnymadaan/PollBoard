@@ -1,5 +1,6 @@
 import Poll from "../models/Poll.models.js";
-import Response from "../models/Response.models.js";
+import Response from "../models/Response.models.js"; 
+import { io } from "../server.js";
 
 export const createPoll = async (req, res) => {
 
@@ -177,6 +178,7 @@ export const submitVote = async (req, res) => {
 
 
     await poll.save();
+    io.emit( "pollUpdated" );
 
 
 
@@ -200,8 +202,7 @@ export const submitVote = async (req, res) => {
 
 };
 
-export const getPollAnalytics =
-async (req, res) => {
+export const getPollAnalytics = async (req, res) => {
 
   try {
 
@@ -252,3 +253,160 @@ async (req, res) => {
 
 };
 
+export const publishResults = async (req, res) => {
+
+  try {
+
+    const poll =
+      await Poll.findById(
+        req.params.id
+      );
+
+    if (!poll) {
+
+      return res.status(404).json({
+        message:
+          "Poll not found",
+      });
+
+    }
+
+
+
+    // OWNER CHECK
+    if (
+      poll.createdBy.toString() !==
+      req.user.id
+    ) {
+
+      return res.status(403).json({
+
+        message:
+          "Unauthorized",
+
+      });
+
+    }
+
+
+
+    poll.isPublished =
+      true;
+
+    await poll.save();
+
+
+
+    res.status(200).json({
+
+      message:
+        "Results published",
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      message:
+        error.message,
+
+    });
+
+  }
+
+};
+
+export const getDashboardData = async (req, res) => {
+
+  try {
+
+    const polls =
+      await Poll.find({
+
+        createdBy:
+          req.user.id,
+
+      });
+
+
+
+    const totalPolls =
+      polls.length;
+
+
+
+    const publishedResults =
+      polls.filter(
+        (poll) =>
+          poll.isPublished
+      ).length;
+
+
+
+    const activePolls =
+      polls.filter(
+        (poll) =>
+
+          !poll.expiresAt ||
+
+          new Date(
+            poll.expiresAt
+          ) > new Date()
+
+      ).length;
+
+
+
+    let totalResponses = 0;
+
+
+
+    polls.forEach((poll) => {
+
+      poll.questions.forEach(
+        (question) => {
+
+          question.options.forEach(
+            (option) => {
+
+              totalResponses +=
+                option.votes;
+
+            }
+          );
+
+        }
+      );
+
+    });
+
+
+
+    res.status(200).json({
+
+      totalPolls,
+
+      totalResponses,
+
+      activePolls,
+
+      publishedResults,
+
+      recentPolls:
+        polls.slice(-3).reverse(),
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+
+      message:
+        error.message,
+
+    });
+
+  }
+
+};

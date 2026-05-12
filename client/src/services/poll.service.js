@@ -95,3 +95,48 @@ export const getPollAnalytics = async (
 
   return response.data;
 };
+
+export const publishResults = async (
+  pollId,
+  token
+) => {
+
+  const response =
+    await axios.patch(
+
+      `${API}/${pollId}/publish`,
+
+      {},
+
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+
+    );
+
+  return response.data;
+};
+
+export const getDashboardData = async (token) => {
+
+  const response =
+    await axios.get(
+
+      `${API}/dashboard-data`,
+
+      {
+        headers: {
+
+          Authorization:
+            `Bearer ${token}`,
+
+        },
+      }
+
+    );
+
+  return response.data;
+};

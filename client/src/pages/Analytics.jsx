@@ -38,10 +38,9 @@ export default function Analytics() {
 
 
 
-  useEffect(() => {
+    useEffect(() => {
 
-    const fetchAnalytics =
-      async () => {
+    const fetchAnalytics = async () => {
 
       try {
 
@@ -72,7 +71,19 @@ export default function Analytics() {
 
     fetchAnalytics();
 
-  }, [id]);
+    socket.on( "pollUpdated", () => {
+        fetchAnalytics();
+    });
+
+    return () => {
+
+  socket.off(
+    "pollUpdated"
+  );
+
+};
+
+    }, [id]);
 
 
 

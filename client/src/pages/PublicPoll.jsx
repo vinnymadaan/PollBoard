@@ -13,16 +13,19 @@ export default function PublicPoll() {
 
   const { id } = useParams();
 
+  const [poll, setPoll] = useState(null);
 
+  const [loading, setLoading] = useState(true);
 
-  const [poll, setPoll] =
-    useState(null);
+  const [answers, setAnswers] = useState({});
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [answers, setAnswers] =
-    useState({});
+    const isExpired = 
+    poll &&
+    poll.expiresAt &&
+    new Date() >
+    new Date(
+      poll.expiresAt
+  );
 
 
 
@@ -283,6 +286,8 @@ export default function PublicPoll() {
 
                         key={optionIndex}
 
+                        disabled={isExpired}
+
                         onClick={() =>
                           handleSelect(
                             questionIndex,
@@ -323,15 +328,31 @@ export default function PublicPoll() {
             ))}
 
           </div>
+          
+          {isExpired && (
 
+          <div className="mt-10 bg-red-500/10 border border-red-500/20 text-red-300 rounded-2xl p-5 text-center">
+
+            This poll has expired.
+            Voting is closed.
+
+          </div>
+
+          )}
 
 
           {/* SUBMIT */}
           <button
 
+            disabled={isExpired}
+
             onClick={handleSubmit}
 
-            className="w-full mt-14 bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-[1.01] transition-all duration-300 py-5 rounded-2xl font-bold text-lg shadow-2xl shadow-cyan-500/20"
+            className={`w-full mt-14 py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${
+            sExpired
+            ? "bg-slate-700 cursor-not-allowed"
+            : "bg-gradient-to-r from-blue-600 to-cyan-500 hover:scale-[1.01] shadow-2xl shadow-cyan-500/20"
+            }`}
           >
             Submit Vote
           </button>

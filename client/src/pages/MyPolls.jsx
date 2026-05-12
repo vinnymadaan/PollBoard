@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { motion } from "framer-motion";
+import { publishResults } from "../services/poll.service";
 
 import {
   getMyPolls,
@@ -71,6 +72,86 @@ export default function MyPolls() {
     );
   }
 
+const handleCopyLink = (pollId) => {
+
+  const pollLink =
+    `http://localhost:5173/poll/${pollId}`;
+
+  const textArea =
+    document.createElement(
+      "textarea"
+    );
+
+  textArea.value =
+    pollLink;
+
+  document.body.appendChild(
+    textArea
+  );
+
+  textArea.select();
+
+  document.execCommand(
+    "copy"
+  );
+
+  document.body.removeChild(
+    textArea
+  );
+
+  alert(
+    "Poll link copied!"
+  );
+};
+
+
+const handlePublish = async (pollId) => {
+
+  try {
+
+    const token =
+      localStorage.getItem(
+        "token"
+      );
+
+    await publishResults(
+      pollId,
+      token
+    );
+
+
+
+    setPolls(
+      polls.map((poll) =>
+
+        poll._id === pollId
+
+          ? {
+              ...poll,
+              isPublished: true,
+            }
+
+          : poll
+      )
+    );
+
+
+
+    alert(
+      "Results published!"
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      "Failed to publish results"
+    );
+
+  }
+
+};
 
 
 
@@ -234,9 +315,35 @@ export default function MyPolls() {
                     Analytics
                   </button>
 
+                  <button
+
+                        onClick={() =>
+                          handlePublish(
+                            poll._id
+                          )
+                        }
+
+                        disabled={
+                          poll.isPublished
+                        }
+
+                        className={`px-5 py-3 rounded-2xl transition-all duration-300 text-sm font-semibold ${
+                          poll.isPublished
+                            ? "bg-slate-700 cursor-not-allowed"
+                            : "bg-cyan-600 hover:bg-cyan-500"
+                        }`}
+                    >
+
+    {poll.isPublished
+      ? "Published"
+      : "Publish Results"}
+
+  </button>
+
 
 
                   <button
+                    onClick={ () => handleCopyLink( poll._id ) }
                     className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all duration-300 text-sm font-semibold"
                   >
                     Share

@@ -40,6 +40,7 @@ export const io = new Server(server, {
 
 app.use(cors({
   origin: [
+    "https://pollflow.vinnydev.in",
     "https://poll-board-735w.vercel.app",
     "http://localhost:5173",
     "http://127.0.0.1:5173",

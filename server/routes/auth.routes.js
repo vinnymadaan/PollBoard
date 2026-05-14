@@ -3,7 +3,9 @@ import express from "express";
 import { signup, login, forgotPassword } from "../controllers/auth.controllers.js";
 import { protect } from "../middleware/auth.middleware.js";
 import { checkPhone } from "../controllers/auth.controllers.js";
+import { resetPassword } from "../controllers/auth.controllers.js";
 import { resetPasswordWithPhone } from "../controllers/auth.controllers.js";
+
 
 const router = express.Router();
 
@@ -16,6 +18,12 @@ router.post(
   "/forgot-password",
   forgotPassword
 );
+
+router.post(
+  "/reset-password",
+  resetPassword
+);
+
 router.post(
   "/reset-password-phone",
   resetPasswordWithPhone

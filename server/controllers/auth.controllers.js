@@ -4,6 +4,8 @@ import crypto from "crypto";
 
 import User from "../models/User.models.js";
 
+const app_url = process.env.PUBLIC_APP_URL
+
 export const signup = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
@@ -150,7 +152,7 @@ export const forgotPassword = async (req, res) => {
 
     // RESET LINK
     const resetLink =
-      `http://localhost:5173/reset-password/${resetToken}`;
+      `${app_url}/reset-password/${resetToken}`;
 
     res.status(200).json({
       message: "Reset link generated",

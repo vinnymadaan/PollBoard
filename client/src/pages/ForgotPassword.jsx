@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 
 import AuthLayout from "../layouts/Auth.layout.jsx";
 
+const api_url = import.meta.env.VITE_API_URL
+
+
 function ForgotPassword() {
   // email OR phone
   const [method, setMethod] = useState("email");
@@ -67,7 +70,7 @@ function ForgotPassword() {
     }
 
     await axios.post(
-      "http://localhost:8000/api/auth/reset-password-phone",
+      `${api_url}/auth/reset-password-phone`,
       {
         phone,
         newPassword,
@@ -96,7 +99,7 @@ function ForgotPassword() {
   try {
     // backend request
     const response = await fetch(
-      "http://localhost:8000/api/auth/forgot-password",
+      `${api_url}/auth/forgot-password`,
       {
         method: "POST",
         headers: {
@@ -177,7 +180,7 @@ function ForgotPassword() {
   try {
 
     const response = await axios.post(
-      "http://localhost:8000/api/auth/check-phone",
+      `${api_url}/auth/check-phone`,
       { phone }
     );
 

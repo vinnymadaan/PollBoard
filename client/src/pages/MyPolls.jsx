@@ -18,6 +18,9 @@ import toast
 from "react-hot-toast";
 
 
+const app_url = import.meta.env.VITE_PUBLIC_URL
+
+
 export default function MyPolls() {
 
     const navigate =
@@ -86,7 +89,7 @@ export default function MyPolls() {
 const handleCopyLink = (pollId) => {
 
   const pollLink =
-    `http://localhost:5173/poll/${pollId}`;
+    `${app_url}/poll/${pollId}`;
 
   const textArea =
     document.createElement(

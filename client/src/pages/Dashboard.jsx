@@ -3,6 +3,7 @@ import { getDashboardData } from "../services/poll.service";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
+const app_url = import.meta.env.VITE_PUBLIC_URL
 
 export default function Dashboard() {
 
@@ -84,7 +85,7 @@ const handleCopyLink =
 (pollId) => {
 
   const pollLink =
-    `http://localhost:5173/poll/${pollId}`;
+    `${app_url}/poll/${pollId}`;
 
   const textArea =
     document.createElement(

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8000/api/auth";
+const API = `${import.meta.env.VITE_API_URL}/auth`;
 
 // signup
 export const signupUser = async (formData) => {

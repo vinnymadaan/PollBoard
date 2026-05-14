@@ -9,6 +9,7 @@ import {
 
 import axios from "axios";
 
+const api_url = import.meta.env.VITE_API_URL
 
 
 function Results() {
@@ -42,7 +43,7 @@ function Results() {
         const response =
           await axios.get(
 
-            `http://localhost:8000/api/polls/${id}`
+            `${api_url}/polls/${id}`
 
           );
 

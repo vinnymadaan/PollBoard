@@ -123,32 +123,39 @@ const handleCopyLink =
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-10">
         {/* NAVBAR */}
-        <div className="flex items-center justify-between mb-14">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight">
-              PollFlow Dashboard
-            </h1>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-12">
 
-            <p className="text-slate-400 mt-3 text-lg">
-              Create, manage and analyze your realtime polls.
-            </p>
-          </div>
+  {/* LEFT */}
+  <div>
+    <h1 className="text-5xl font-black tracking-tight">
+      PollFlow Dashboard
+    </h1>
 
-           
+    <p className="text-slate-400 mt-3 text-lg">
+      Create, manage and analyze your realtime polls.
+    </p>
+  </div>
 
-          <button
-          onClick={ () => navigate("/create-poll") }
-           className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105">
-            + Create Poll
-          </button>
+  {/* RIGHT BUTTONS */}
+  <div className="flex items-center gap-3">
 
-          <Link to="/">
-            <button className="bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold">
-              Home
-            </button>
-          </Link>
+    
 
-        </div>
+    <Link to="/create-poll">
+      <button className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-7 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105">
+        + Create Poll
+      </button>
+    </Link>
+
+    <Link to="/">
+      <button className="bg-black/25 hover:bg-black/10 border border-white/10 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold">
+        Home
+      </button>
+    </Link>
+
+  </div>
+
+</div>
 
         {/* STATS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">

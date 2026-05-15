@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getDashboardData } from "../services/poll.service";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const app_url = import.meta.env.VITE_PUBLIC_URL
@@ -134,11 +134,20 @@ const handleCopyLink =
             </p>
           </div>
 
+           
+
           <button
           onClick={ () => navigate("/create-poll") }
            className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold shadow-2xl shadow-blue-500/20 hover:scale-105">
             + Create Poll
           </button>
+
+          <Link to="/">
+            <button className="bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold">
+              Home
+            </button>
+          </Link>
+
         </div>
 
         {/* STATS */}

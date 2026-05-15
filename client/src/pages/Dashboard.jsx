@@ -148,7 +148,7 @@ const handleCopyLink =
     </Link>
 
     <Link to="/">
-      <button className="bg-black/25 hover:bg-black/10 border border-white/10 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold">
+      <button className="bg-black/15 hover:bg-black/10 border border-white/10 transition-all duration-300 px-6 py-4 rounded-2xl font-semibold">
         Home
       </button>
     </Link>

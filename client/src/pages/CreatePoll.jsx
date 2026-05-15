@@ -35,6 +35,8 @@ export default function CreatePoll() {
   setScheduledAt] =
   useState("");
 
+  const [expiresAt, setExpiresAt] = useState("");
+
     const navigate = useNavigate();
 
 
@@ -133,11 +135,9 @@ export default function CreatePoll() {
 
       allowAnonymous,
 
-      expiresAt:
-        new Date(
-          Date.now() +
-          7 * 24 * 60 * 60 * 1000
-        ),
+      expiresAt: expiresAt
+        ? new Date(expiresAt)
+        : null,
 
     };
 
@@ -325,6 +325,27 @@ const removeQuestion = (
 
                 </div>
 
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mt-4">
+  <div className="flex flex-col gap-2">
+    
+    <label className="text-white font-medium">
+      Poll Expiry
+    </label>
+
+    <p className="text-sm text-gray-400">
+      Select when this poll should expire.
+    </p>
+
+    <input
+      type="datetime-local"
+      value={expiresAt}
+      onChange={(e) => setExpiresAt(e.target.value)}
+      className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+    />
+  </div>
+</div>
+
               </div>
 
             </motion.div>
@@ -365,7 +386,7 @@ const removeQuestion = (
 
 
                     <button
-                    onClick={() =>removeQuestion(index)}
+                    onClick={() =>removeQuestion(questionIndex)}
                       className="text-red-400 hover:text-red-300 transition-all duration-300"
                     >
                       Remove

@@ -30,6 +30,11 @@ export default function CreatePoll() {
       },
     ]);
 
+
+    const [scheduledAt,
+  setScheduledAt] =
+  useState("");
+
     const navigate = useNavigate();
 
 
@@ -159,6 +164,21 @@ export default function CreatePoll() {
   }
 };
 
+const removeQuestion = (
+  questionIndex
+) => {
+
+  const updatedQuestions =
+    questions.filter(
+      (_, index) =>
+        index !== questionIndex
+    );
+
+  setQuestions(
+    updatedQuestions
+  );
+};
+
 
   return (
 
@@ -185,7 +205,7 @@ export default function CreatePoll() {
               Design beautiful interactive polls for your audience.
             </p>
           </div>
-
+            
 
 
           <button
@@ -345,6 +365,7 @@ export default function CreatePoll() {
 
 
                     <button
+                    onClick={() =>removeQuestion(index)}
                       className="text-red-400 hover:text-red-300 transition-all duration-300"
                     >
                       Remove

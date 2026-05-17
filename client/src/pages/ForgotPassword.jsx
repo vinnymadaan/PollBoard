@@ -32,6 +32,10 @@ function ForgotPassword() {
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
+  // Firebase ID token captured after a successful OTP verification.
+  // Sent to the server as proof of phone ownership.
+  const [idToken, setIdToken] = useState("");
+
   const navigate = useNavigate();
 
   // send action
@@ -47,9 +51,25 @@ function ForgotPassword() {
 };
 
   // verify otp
-  const handleVerifyOtp = () => {
-    // later real verification
-    setStep("reset");
+  const handleVerifyOtp = async () => {
+    try {
+      if (!window.confirmationResult) {
+        toast.error("OTP session expired. Please resend.");
+        return;
+      }
+
+      const credential =
+        await window.confirmationResult.confirm(otp);
+
+      const token = await credential.user.getIdToken();
+
+      setIdToken(token);
+
+      setStep("reset");
+    } catch (error) {
+      console.log(error);
+      toast.error("Invalid OTP");
+    }
   };
 
   // reset password
@@ -69,10 +89,15 @@ function ForgotPassword() {
       return;
     }
 
+    if (!idToken) {
+      toast.error("Please verify your phone via OTP first");
+      return;
+    }
+
     await axios.post(
       `${api_url}/auth/reset-password-phone`,
       {
-        phone,
+        idToken,
         newPassword,
       }
     );

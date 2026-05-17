@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 import User from "../models/User.models.js";
+import admin from "../config/firebase.js";
 
 const app_url = process.env.PUBLIC_APP_URL
 
@@ -296,40 +297,55 @@ export const resetPasswordWithPhone = async (req, res) => {
 
   try {
 
-    const {
-      phone,
-      newPassword,
-    } = req.body;
+    const { idToken, newPassword } = req.body;
 
-    const cleanPhone =
-      String(phone).replace(/^0+/, "");
-
-    const user =
-      await User.findOne({
-        phone: cleanPhone,
-      });
-
-    if (!user) {
-      return res.status(404).json({
-        message:
-          "User not found",
+    if (!idToken || !newPassword) {
+      return res.status(400).json({
+        message: "Missing required fields",
       });
     }
 
-    const hashedPassword =
-      await bcrypt.hash(
-        newPassword,
-        10
-      );
+    // Verify the Firebase ID token issued after the client-side OTP flow.
+    // This is the only proof that the requester controls the phone number.
+    let decoded;
+    try {
+      decoded = await admin.auth().verifyIdToken(idToken);
+    } catch (err) {
+      return res.status(401).json({
+        message: "Invalid or expired verification token",
+      });
+    }
 
-    user.password =
-      hashedPassword;
+    const verifiedPhone = decoded.phone_number;
+
+    if (!verifiedPhone) {
+      return res.status(401).json({
+        message: "Token does not include a verified phone number",
+      });
+    }
+
+    // Phones are stored as bare digits with leading zeros stripped (see signup).
+    // Firebase issues phones in E.164 (e.g. +919876543210); the client prepends +91.
+    const cleanPhone = verifiedPhone
+      .replace(/^\+91/, "")
+      .replace(/^0+/, "");
+
+    const user = await User.findOne({ phone: cleanPhone });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
 
     await user.save();
 
     res.status(200).json({
-      message:
-        "Password reset successful",
+      message: "Password reset successful",
     });
 
   } catch (error) {
